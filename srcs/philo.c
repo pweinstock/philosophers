@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test2.c                                            :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pweinsto <pweinsto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/03 18:04:14 by pweinsto          #+#    #+#             */
-/*   Updated: 2021/12/03 18:27:36 by pweinsto         ###   ########.fr       */
+/*   Created: 2021/12/08 13:47:08 by pweinsto          #+#    #+#             */
+/*   Updated: 2021/12/11 19:28:49 by pweinsto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <time.h>
-
-void	*roll_dice()
-{
-	int	*res;
-
-	res = malloc(sizeof(int));
-	*res = (rand() % 6) + 1;
-	return ((void *)res);
-}
+#include "../includes/philo.h"
 
 int	main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
+	t_args		args;
+	t_philo		*philos;
+	pthread_t	death;
 
-	pthread_t	th;
-	int	*res;
-	
-	pthread_create(&th, NULL, &roll_dice, NULL);
-	pthread_join(th, (void **)&res);
-	printf("res: %d\n", *res);
-	free(res);
-	return (1);
+	if (!init(argc, argv, &args))
+		return (0);
+	if (!create_forks(&args))
+		return (0);
+	philos = ft_calloc(sizeof(t_philo) * args.number_of_philo);
+	if (!philos)
+		return (0);
+	create_philos(philos, &args);
+	pthread_create(&death, NULL, &death_check, &philos);
+	join_philos(philos, &args);
+	pthread_join(death, NULL);
+	printf("Game over!\n");
+	return (0);
 }
