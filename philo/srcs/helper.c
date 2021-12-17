@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helpers.c                                          :+:      :+:    :+:   */
+/*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pweinsto <pweinsto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:11:53 by pweinsto          #+#    #+#             */
-/*   Updated: 2021/12/11 20:12:34 by pweinsto         ###   ########.fr       */
+/*   Updated: 2021/12/17 17:32:28 by pweinsto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ int	time_diff(struct timeval base_time)
 	- ((base_time.tv_sec * 1000) + (base_time.tv_usec / 1000)));
 }
 
-void	ft_usleep(int milisec)
+void	ft_usleep(int milisec, int *death)
 {
 	struct timeval	base_time;
 
 	gettimeofday(&base_time, NULL);
-	while (time_diff(base_time) < milisec)
+	while (time_diff(base_time) < milisec && !*death)
 		usleep(500);
 	return ;
 }
@@ -57,6 +57,12 @@ void	all_meals(t_philo *philo)
 	philo->args->philo_died = 1;
 	printf("%d: philo %d has finished the last meal\n", \
 	time_diff(philo->base_time), philo->id);
+	i = 0;
+	while (i < philo->args->number_of_philo)
+	{
+		pthread_mutex_unlock(&philo->args->forks[i]);
+		i++;
+	}
 	pthread_mutex_unlock(&philo->args->print_lock);
 	return ;
 }

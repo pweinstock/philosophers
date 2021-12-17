@@ -6,7 +6,7 @@
 /*   By: pweinsto <pweinsto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 13:47:41 by pweinsto          #+#    #+#             */
-/*   Updated: 2021/12/11 20:16:13 by pweinsto         ###   ########.fr       */
+/*   Updated: 2021/12/17 17:32:34 by pweinsto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	*death_check(void *philo);
 
 //helper
 int		time_diff(struct timeval base_time);
-void	ft_usleep(int milisec);
+void	ft_usleep(int milisec, int *death);
 int		last_phil(t_philo *philo);
 void	all_meals(t_philo *philo);
 void	destroy(t_philo *philos, t_args *args);

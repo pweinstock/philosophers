@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   death_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pweinsto <pweinsto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/08 13:47:08 by pweinsto          #+#    #+#             */
-/*   Updated: 2021/12/11 19:28:49 by pweinsto         ###   ########.fr       */
+/*   Created: 2021/12/11 20:08:36 by pweinsto          #+#    #+#             */
+/*   Updated: 2021/12/17 14:51:10 by pweinsto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	main(int argc, char **argv)
+void	*death_check(void *philo)
 {
-	t_args		args;
-	t_philo		*philos;
-	pthread_t	death;
+	t_philo	*philos;
+	int		i;
 
-	if (!init(argc, argv, &args))
-		return (0);
-	if (!create_forks(&args))
-		return (0);
-	philos = ft_calloc(sizeof(t_philo) * args.number_of_philo);
-	if (!philos)
-		return (0);
-	create_philos(philos, &args);
-	pthread_create(&death, NULL, &death_check, &philos);
-	join_philos(philos, &args);
-	pthread_join(death, NULL);
-	printf("Game over!\n");
-	return (0);
+	philos = *(t_philo **)philo;
+	i = 0;
+	while (philos[i].args->philo_died == 0)
+	{
+		if (time_diff(philos[i].last_meal) >= philos[i].args->time_to_die)
+		{
+			philos[i].args->philo_died = 1;
+			dying(&(philos[i]));
+			return (NULL);
+		}
+		i++;
+		if (i >= philos[0].args->number_of_philo)
+			i = 0;
+		usleep(philos[i].args->number_of_philo * 5);
+	}
+	return (NULL);
 }

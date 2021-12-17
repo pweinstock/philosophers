@@ -6,7 +6,7 @@
 /*   By: pweinsto <pweinsto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:25:56 by pweinsto          #+#    #+#             */
-/*   Updated: 2021/12/11 19:29:26 by pweinsto         ###   ########.fr       */
+/*   Updated: 2021/12/14 12:11:43 by pweinsto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	init(int argc, char **argv, t_args *args)
 	if (argc < 5 || argc > 6 || !ft_arenumbers(argv))
 		return (0);
 	args->number_of_philo = ft_atoi(argv[1]);
+	if (args->number_of_philo == 0)
+		return (0);
 	args->time_to_die = ft_atoi(argv[2]);
 	args->time_to_eat = ft_atoi(argv[3]);
 	args->time_to_sleep = ft_atoi(argv[4]);
